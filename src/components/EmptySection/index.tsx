@@ -1,6 +1,6 @@
 import React from "react"
 import { Button, Row, Col } from "react-bootstrap"
-import { IoPersonOutline } from "react-icons/io5"
+import { IoFish } from "react-icons/io5"
 
 type EmptySectionProps = {
   title: string | undefined
@@ -20,7 +20,7 @@ const EmptySection = ({
   return (
     <Row className="mt-3 section-empty">
       <Row className="mb-4 d-flex justify-content-center align-items-center">
-        <IoPersonOutline className="icon-lg illustration" />
+        <IoFish className="icon-lg illustration" />
       </Row>
       <Row className="mb-2 empty-title d-flex justify-content-center align-items-center">
         {title}

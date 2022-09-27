@@ -255,8 +255,8 @@ export const CustomTable = ({
   if (tableBody?.length === 0) {
     return (
       <EmptySection
-        title="No Contact"
-        desc="There is no contact at the moment."
+        title="No Data"
+        desc="There is no data at the moment."
         buttonMessage={undefined}
         isShowButton={false}
         handleButtonClick={() => {}}

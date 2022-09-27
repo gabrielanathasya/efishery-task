@@ -11,13 +11,21 @@ const List = () => {
   const state: any = useAppState()
   const overmindActions: any = useActions()
   const [searchTerm, setSearchTerm] = useState("")
-  const [page, setPage] = useState(1)
+  const [searchBy, setSearchBy] = useState("komoditas")
   const size = 10
   const [isOpenForm, setIsOpenForm] = useState(false)
   const [isOpenModalDelete, setIsOpenModalDelete] = useState(false)
   const [editId, setEditId] = useState<any>(null)
+  const limit = 10
 
+  const { isRequesting } = state
   const { listData } = state.list
+
+  useEffect(() => {
+    overmindActions.list.getTotalList(limit).then(() => {
+      fetchListData(listData.tablePaging.page || 1, searchTerm, searchBy)
+    })
+  }, [searchTerm, searchBy])
 
   useEffect(() => {
     if (listData?.tableBody?.length === 0) {
@@ -25,19 +33,44 @@ const List = () => {
     }
   }, [listData?.tableBody])
 
+  const fetchListData = (
+    page: any,
+    searchTerm: string | undefined = undefined,
+    searchBy: string | undefined = undefined
+  ) => {
+    const current = page || listData?.tablePaging?.page
+
+    const params: any = {
+      limit,
+      offset: (current - 1) * limit,
+    }
+
+    if (searchBy && searchTerm) {
+      const search: any = {}
+      search[searchBy] = searchTerm
+      params["search"] = JSON.stringify(search)
+    }
+
+    overmindActions.list.getList({
+      params,
+      current,
+    })
+  }
+
   const handlePrev = () => {
-    if (page > 1) {
-      setPage(page - 1)
+    const current = listData.tablePaging.page
+    if (current > 1) {
+      fetchListData(current - 1)
     }
   }
   const handleNext = () => {
-    const totalPage = Math.ceil(listData?.tableBody?.length / size)
-    if (page !== totalPage) {
-      setPage(page + 1)
+    const current = listData.tablePaging.page
+    if (current !== listData.tablePaging.totalPage) {
+      fetchListData(current + 1)
     }
   }
   const handleClick = (current: number) => {
-    setPage(current)
+    fetchListData(current)
   }
 
   const handleAddList = () => {
@@ -67,7 +100,7 @@ const List = () => {
 
   return (
     <Container className="px-md-5 py-md-5 mt-3">
-      {/* {(loading || loadingDelete) && <SpinnerComponent />} */}
+      {isRequesting && <SpinnerComponent />}
 
       <Row>
         <Col>
@@ -86,17 +119,17 @@ const List = () => {
                 onChange={debounce((e: any) => {
                   setSearchTerm(e.target.value)
                 }, 800)}
-                placeholder="Search product name..."
+                placeholder="Search keyword..."
               />
             </Col>
           </Row>
           <Row>
             <Col>
               <CustomTable
-                tableHead={listData.tableHead}
-                tableBody={listData.tableBody}
-                totalPage={Math.ceil(listData?.tableBody?.length / size)}
-                current={page}
+                tableHead={listData?.tableHead}
+                tableBody={listData?.tableBody}
+                totalPage={listData?.tablePaging?.totalPage}
+                current={listData?.tablePaging?.page}
                 pageSize={size}
                 handlePrev={() => handlePrev()}
                 handleNext={() => handleNext()}

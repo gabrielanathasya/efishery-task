@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react"
 import { useAppState, useActions } from "data/overmind"
 import { useFormik } from "formik"
 import { Button, Form, Row, Col } from "react-bootstrap"
+import { epochToDate } from "utils/date"
 import validationSchema from "./validationSchema"
 import SpinnerComponent from "components/Spinner"
+const moment = require("moment")
+
 type ContactFormProps = {
   id: number | string | null
   handleSubmitForm: () => void
@@ -13,19 +16,25 @@ const FormComponent = ({ id, handleSubmitForm }: ContactFormProps) => {
   const state: any = useAppState()
   const overmindActions: any = useActions()
   const [initialValue, setInitialValue] = useState({
-    productName: "",
-    location: "",
-    price: [],
+    komoditas: "",
+    areaProvinsi: "",
+    areaKota: "",
+    size: 0,
+    price: 0,
+    tanggal: epochToDate(Date.now()),
   })
-  const { detailData: detailDataState } = state.list
+  const { detailData } = state.list
 
   useEffect(() => {
     setInitialValue({
-      productName: detailDataState?.productName || "",
-      location: detailDataState?.location || "",
-      price: detailDataState?.price || [],
+      komoditas: detailData?.komoditas || "",
+      areaProvinsi: detailData?.areaProvinsi || "",
+      areaKota: detailData?.areaKota || "",
+      size: detailData?.size || 0,
+      price: detailData?.price || 0,
+      tanggal: moment(detailData?.tanggal).format("YYYY-MM-DD"),
     })
-  }, [detailDataState])
+  }, [detailData])
 
   const onSubmitForm = (values: any, actions: any) => {
     if (values) {
@@ -66,38 +75,53 @@ const FormComponent = ({ id, handleSubmitForm }: ContactFormProps) => {
       <Form onSubmit={handleSubmit} className="work-form">
         <Row>
           <Col sm={12} md={6} className="mb-3">
-            <Form.Label>Product Name</Form.Label>
+            <Form.Label>Komoditas</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Product Name"
-              name="productName"
-              value={values?.productName}
+              placeholder="Komoditas"
+              name="komoditas"
+              value={values?.komoditas}
               onChange={handleChange}
             />
-            {errors?.productName && (
+            {errors?.komoditas && (
               <Form.Text className="text-danger">
-                <>{errors?.productName}</>
+                <>{errors?.komoditas}</>
               </Form.Text>
             )}
           </Col>
           <Col sm={12} md={6} className="mb-3">
-            <Form.Label>Location</Form.Label>
+            <Form.Label>Area Provinsi</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Location"
-              name="location"
-              value={values?.location}
+              placeholder="Area Provinsi"
+              name="areaProvinsi"
+              value={values?.areaProvinsi}
               onChange={handleChange}
             />
-            {errors?.location && (
+            {errors?.areaProvinsi && (
               <Form.Text className="text-danger">
-                <>{errors?.location}</>
+                <>{errors?.areaProvinsi}</>
               </Form.Text>
             )}
           </Col>
         </Row>
 
         <Row>
+          <Col sm={12} md={6} className="mb-3">
+            <Form.Label>Size</Form.Label>
+            <Form.Control
+              type="number"
+              placeholder="Size"
+              name="size"
+              value={values?.size}
+              onChange={handleChange}
+            />
+            {errors?.size && (
+              <Form.Text className="text-danger">
+                <>{errors?.size}</>
+              </Form.Text>
+            )}
+          </Col>
           <Col sm={12} md={6} className="mb-3">
             <Form.Label>Price</Form.Label>
             <Form.Control
@@ -110,6 +134,23 @@ const FormComponent = ({ id, handleSubmitForm }: ContactFormProps) => {
             {errors?.price && (
               <Form.Text className="text-danger">
                 <>{errors?.price}</>
+              </Form.Text>
+            )}
+          </Col>
+        </Row>
+
+        <Row>
+          <Col sm={12} md={6} className="mb-3">
+            <Form.Label>Tanggal</Form.Label>
+            <Form.Control
+              name="tanggal"
+              type="date"
+              value={values?.tanggal}
+              onChange={handleChange}
+            />
+            {errors?.tanggal && (
+              <Form.Text className="text-danger">
+                <>{errors?.tanggal}</>
               </Form.Text>
             )}
           </Col>
