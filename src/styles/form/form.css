@@ -1,0 +1,26 @@
+.form-component {
+  text-align: left;
+}
+
+.form-component .pic-wrapper {
+  width: 120px;
+  height: 120px;
+}
+
+.form-component .submit-button {
+  background: #344054;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.form-component .submit-button:hover {
+  background: #5c7297;
+}
+/*# sourceMappingURL=form.css.map */

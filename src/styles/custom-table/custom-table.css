@@ -1,0 +1,29 @@
+.custom-table .cellDesktop,
+.custom-table .cell {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.custom-table .cellHeader {
+  word-wrap: break-word;
+}
+
+.custom-table .cellDesktop {
+  max-width: 140px;
+  margin: 16px 0;
+}
+
+.custom-table thead {
+  border-top: solid 2px #dee2e6;
+}
+
+.custom-table .detail-button {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.custom-table .detail-button:hover {
+  opacity: 0.5;
+}
+/*# sourceMappingURL=custom-table.css.map */

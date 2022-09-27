@@ -1,0 +1,23 @@
+.spinner {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 1050;
+  background-color: rgba(196, 196, 196, 0.6);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.spinner .text-primary {
+  color: #d6b589 !important;
+}
+/*# sourceMappingURL=spinner.css.map */
