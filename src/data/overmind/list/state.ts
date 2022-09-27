@@ -1,5 +1,8 @@
 export const state = {
   detailData: null,
+  areaOption: [],
+  areaMap: null,
+  sizeOption: [],
   listData: {
     tableHead: [
       "Komoditas",

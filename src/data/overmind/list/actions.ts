@@ -45,6 +45,53 @@ export const getTotalList = async ({ state, effects }: any, limit: any) => {
   state.isRequesting = false
 }
 
+export const getAreaOption = async ({ state, effects }: any) => {
+  state.isRequesting = true
+  await effects.list.services
+    .getAreaOption()
+    .then((res: any) => {
+      const areaMap: any = {}
+      const processedData = res.data?.map((item: any) => {
+        if (item.city) {
+          areaMap[item.city] = item.province
+          return {
+            value: item.city,
+            label: item.city,
+          }
+        }
+      })
+      state.list.areaOption = processedData.filter((e: any) => e !== undefined)
+      state.list.areaMap = areaMap
+    })
+    .catch((error: any) => {
+      console.error("[FAIL GET DATA]", error)
+      alert("Get Area Option Failed")
+    })
+  state.isRequesting = false
+}
+
+export const getSizeOption = async ({ state, effects }: any) => {
+  state.isRequesting = true
+  await effects.list.services
+    .getSizeOption()
+    .then((res: any) => {
+      const processedData = res.data?.map((item: any) => {
+        if (item.size) {
+          return {
+            value: item.size,
+            label: item.size,
+          }
+        }
+      })
+      state.list.sizeOption = processedData.filter((e: any) => e !== undefined)
+    })
+    .catch((error: any) => {
+      console.error("[FAIL GET DATA]", error)
+      alert("Get Area Option Failed")
+    })
+  state.isRequesting = false
+}
+
 // export const getDetail = async ({ state, effects }, { id }) => {
 //   state.isRequesting = true
 

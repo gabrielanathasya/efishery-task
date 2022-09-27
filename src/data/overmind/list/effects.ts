@@ -13,4 +13,10 @@ export const services = {
   delete({ id }: any) {
     return listService.deleteData({ id })
   },
+  getAreaOption() {
+    return listService.getAreaOption()
+  },
+  getSizeOption() {
+    return listService.getSizeOption()
+  },
 }

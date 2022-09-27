@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { useAppState, useActions } from "data/overmind"
 import { useFormik } from "formik"
 import { Button, Form, Row, Col } from "react-bootstrap"
+import Select from "react-select"
 import { epochToDate } from "utils/date"
 import validationSchema from "./validationSchema"
 import SpinnerComponent from "components/Spinner"
@@ -17,19 +18,25 @@ const FormComponent = ({ id, handleSubmitForm }: ContactFormProps) => {
   const overmindActions: any = useActions()
   const [initialValue, setInitialValue] = useState({
     komoditas: "",
-    areaProvinsi: "",
     areaKota: "",
+    areaProvinsi: "",
     size: 0,
     price: 0,
     tanggal: epochToDate(Date.now()),
   })
-  const { detailData } = state.list
+  const { detailData, areaOption, areaMap, sizeOption } = state.list
+  const { isRequesting } = state
+
+  useEffect(() => {
+    overmindActions.list.getAreaOption()
+    overmindActions.list.getSizeOption()
+  }, [])
 
   useEffect(() => {
     setInitialValue({
       komoditas: detailData?.komoditas || "",
-      areaProvinsi: detailData?.areaProvinsi || "",
       areaKota: detailData?.areaKota || "",
+      areaProvinsi: detailData?.areaProvinsi || "",
       size: detailData?.size || 0,
       price: detailData?.price || 0,
       tanggal: moment(detailData?.tanggal).format("YYYY-MM-DD"),
@@ -46,6 +53,18 @@ const FormComponent = ({ id, handleSubmitForm }: ContactFormProps) => {
       handleSubmitForm()
     } else {
       alert("Please fill out the form")
+    }
+  }
+
+  const handleSelectOnChange = (fieldName: any) => {
+    let labels: any = { assignedToId: "assignedToName" }
+
+    return (option: any) => {
+      setFieldValue(labels[fieldName], option.label)
+      setFieldValue(fieldName, option.value)
+      if (fieldName !== "size") {
+        setFieldValue("areaProvinsi", areaMap[option.value])
+      }
     }
   }
 
@@ -67,11 +86,11 @@ const FormComponent = ({ id, handleSubmitForm }: ContactFormProps) => {
     isSubmitting,
   } = formik
 
+  console.log({ areaOption, areaMap })
+
   return (
     <div className="form-component">
-      {/* {(loading || loadingDetail || loadingEdit || loadingAddPhone) && (
-        <SpinnerComponent />
-      )} */}
+      {isRequesting && <SpinnerComponent />}
       <Form onSubmit={handleSubmit} className="work-form">
         <Row>
           <Col sm={12} md={6} className="mb-3">
@@ -89,32 +108,66 @@ const FormComponent = ({ id, handleSubmitForm }: ContactFormProps) => {
               </Form.Text>
             )}
           </Col>
+
           <Col sm={12} md={6} className="mb-3">
-            <Form.Label>Area Provinsi</Form.Label>
+            <Form.Label>Tanggal</Form.Label>
             <Form.Control
-              type="text"
-              placeholder="Area Provinsi"
-              name="areaProvinsi"
-              value={values?.areaProvinsi}
+              name="tanggal"
+              type="date"
+              value={values?.tanggal}
               onChange={handleChange}
             />
-            {errors?.areaProvinsi && (
+            {errors?.tanggal && (
               <Form.Text className="text-danger">
-                <>{errors?.areaProvinsi}</>
+                <>{errors?.tanggal}</>
               </Form.Text>
             )}
           </Col>
         </Row>
 
         <Row>
+          <Col className="mb-3">
+            <Form.Label>Area Kota</Form.Label>
+            <Select
+              name="areaKota"
+              onChange={handleSelectOnChange("areaKota")}
+              placeholder="Select Area Kota"
+              options={areaOption}
+              value={
+                values.areaKota
+                  ? { value: values.areaKota, label: values.areaKota }
+                  : ""
+              }
+            />
+            {errors.areaKota && (
+              <Form.Text className="text-danger">{errors.areaKota}</Form.Text>
+            )}
+          </Col>
+
+          <Col sm={12} md={6} className="mb-3">
+            <Form.Label>Area Provinsi</Form.Label>
+            <Form.Control
+              disabled
+              type="text"
+              placeholder="Area Provinsi"
+              name="areaProvinsi"
+              value={values.areaProvinsi}
+              onChange={handleChange}
+            />
+          </Col>
+        </Row>
+
+        <Row>
           <Col sm={12} md={6} className="mb-3">
             <Form.Label>Size</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="Size"
+            <Select
               name="size"
-              value={values?.size}
-              onChange={handleChange}
+              onChange={handleSelectOnChange("size")}
+              placeholder="Select Size"
+              options={sizeOption}
+              value={
+                values.size ? { value: values.size, label: values.size } : ""
+              }
             />
             {errors?.size && (
               <Form.Text className="text-danger">
@@ -134,23 +187,6 @@ const FormComponent = ({ id, handleSubmitForm }: ContactFormProps) => {
             {errors?.price && (
               <Form.Text className="text-danger">
                 <>{errors?.price}</>
-              </Form.Text>
-            )}
-          </Col>
-        </Row>
-
-        <Row>
-          <Col sm={12} md={6} className="mb-3">
-            <Form.Label>Tanggal</Form.Label>
-            <Form.Control
-              name="tanggal"
-              type="date"
-              value={values?.tanggal}
-              onChange={handleChange}
-            />
-            {errors?.tanggal && (
-              <Form.Text className="text-danger">
-                <>{errors?.tanggal}</>
               </Form.Text>
             )}
           </Col>

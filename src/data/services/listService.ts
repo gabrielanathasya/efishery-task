@@ -28,5 +28,15 @@ export const listHTTPService = ({
     return baseDelete(pathUrl)
   }
 
-  return { get, create, update, deleteData }
+  const getAreaOption = () => {
+    const pathUrl = "option_area"
+    return baseGet(pathUrl)
+  }
+
+  const getSizeOption = () => {
+    const pathUrl = "option_size"
+    return baseGet(pathUrl)
+  }
+
+  return { get, create, update, deleteData, getAreaOption, getSizeOption }
 }
