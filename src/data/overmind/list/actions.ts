@@ -1,10 +1,11 @@
 export const getList = async (
   { state, effects }: any,
-  { params, current }: any
+  { params, search, current }: any
 ) => {
   state.isRequesting = true
+
   await effects.list.services
-    .getList(params)
+    .getList(params, search)
     .then((res: any) => {
       const processedData = res.data?.map((item: any) => {
         return {

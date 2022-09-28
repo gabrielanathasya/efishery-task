@@ -1,6 +1,7 @@
 import { Button, Form, Container, Row, Col } from "react-bootstrap"
 import { CustomTable } from "components/CustomTable"
 import { useEffect, useState } from "react"
+import Select from "react-select"
 import { useAppState, useActions, overmind } from "data/overmind"
 import ModalComponent from "components/Modal"
 import SpinnerComponent from "components/Spinner"
@@ -12,12 +13,38 @@ const List = () => {
   const overmindActions: any = useActions()
   const [searchTerm, setSearchTerm] = useState("")
   const [searchBy, setSearchBy] = useState("komoditas")
+  const [searchBySelect, setSearchBySelect] = useState("")
   const size = 10
   const [isOpenForm, setIsOpenForm] = useState(false)
   const [isOpenModalDelete, setIsOpenModalDelete] = useState(false)
   const [editId, setEditId] = useState<any>(null)
   const limit = 10
-
+  const searchByOption: any = [
+    {
+      value: "komoditas",
+      label: "Komoditas",
+    },
+    {
+      value: "area_provinsi",
+      label: "Area Provinsi",
+    },
+    {
+      value: "area_kota",
+      label: "Area Kota",
+    },
+    {
+      value: "size",
+      label: "Size",
+    },
+    {
+      value: "price",
+      label: "Price",
+    },
+    {
+      value: "tgl_parsed",
+      label: "Tanggal",
+    },
+  ]
   const { isRequesting } = state
   const { listData } = state.list
 
@@ -39,6 +66,7 @@ const List = () => {
     searchBy: string | undefined = undefined
   ) => {
     const current = page || listData?.tablePaging?.page
+    let search: any
 
     const params: any = {
       limit,
@@ -46,13 +74,16 @@ const List = () => {
     }
 
     if (searchBy && searchTerm) {
-      const search: any = {}
+      search = {}
       search[searchBy] = searchTerm
-      params["search"] = JSON.stringify(search)
+      search = JSON.stringify(search)
     }
+
+    console.log("di fetch", { search })
 
     overmindActions.list.getList({
       params,
+      search,
       current,
     })
   }
@@ -90,14 +121,12 @@ const List = () => {
   }
 
   const handleConfirmDelete = (id: any) => {
-    console.log({ id })
     overmindActions.list.deleteById(id).then(() => {
       fetchListData()
     })
   }
 
   const handleEdit = (id: any) => {
-    console.log("handleEdit", { id })
     setEditId(id)
     setIsOpenForm(true)
   }
@@ -121,13 +150,25 @@ const List = () => {
             </Col>
           </Row>
           <Row>
-            <Col className="mb-3" lg={6} md={6} sm={12}>
+            <Form.Label>Search by</Form.Label>
+            <Col className="mb-3" lg={3} md={6} sm={12}>
+              <Select
+                onChange={(e: any) => {
+                  setSearchBy(e.value)
+                  setSearchBySelect(e)
+                }}
+                placeholder="Search by"
+                options={searchByOption}
+                value={searchBySelect}
+              />
+            </Col>
+            <Col className="mb-3" lg={3} md={6} sm={12}>
               <Form.Control
                 type="text"
                 onChange={debounce((e: any) => {
                   setSearchTerm(e.target.value)
                 }, 800)}
-                placeholder="Search keyword..."
+                placeholder="Search (case sensitive & exact)"
               />
             </Col>
           </Row>

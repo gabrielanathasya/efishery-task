@@ -6,10 +6,14 @@ export const listHTTPService = ({
 }: any) => {
   const path = "list"
 
-  const get = (params: any) => {
+  const get = (params: any, search: any) => {
     let queryParams = new URLSearchParams(params).toString()
 
-    const pathUrl = path + "?" + queryParams
+    let pathUrl = path + "?" + queryParams
+    if (search) {
+      pathUrl = pathUrl + "&search=" + search
+    }
+    console.log({ pathUrl, search })
     return baseGet(pathUrl)
   }
 

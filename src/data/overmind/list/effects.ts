@@ -1,8 +1,8 @@
 import { listService } from "data/services"
 
 export const services = {
-  getList(params: any) {
-    return listService.get(params)
+  getList(params: any, search: any = undefined) {
+    return listService.get(params, search)
   },
   create(spec: any) {
     return listService.create(spec)
