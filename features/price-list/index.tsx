@@ -13,7 +13,15 @@ const List = () => {
   const overmindActions: any = useActions()
   const [searchTerm, setSearchTerm] = useState("")
   const [searchBy, setSearchBy] = useState("komoditas")
-  const [searchBySelect, setSearchBySelect] = useState("")
+  const [sortBy, setSortBy] = useState("komoditas")
+  const [searchBySelect, setSearchBySelect] = useState({
+    value: "komoditas",
+    label: "Komoditas",
+  })
+  const [sortBySelect, setSortBySelect] = useState({
+    value: "komoditas",
+    label: "Komoditas",
+  })
   const size = 10
   const [isOpenForm, setIsOpenForm] = useState(false)
   const [isOpenModalDelete, setIsOpenModalDelete] = useState(false)
@@ -50,9 +58,14 @@ const List = () => {
 
   useEffect(() => {
     overmindActions.list.getTotalList(limit).then(() => {
-      fetchListData(listData.tablePaging.page || 1, searchTerm, searchBy)
+      fetchListData(
+        listData.tablePaging.page || 1,
+        searchTerm,
+        searchBy,
+        sortBy
+      )
     })
-  }, [searchTerm, searchBy])
+  }, [searchTerm, searchBy, sortBy])
 
   useEffect(() => {
     if (listData?.tableBody?.length === 0) {
@@ -63,7 +76,8 @@ const List = () => {
   const fetchListData = (
     page: any = undefined,
     searchTerm: string | undefined = undefined,
-    searchBy: string | undefined = undefined
+    searchBy: string | undefined = undefined,
+    sortBy: string | undefined = undefined
   ) => {
     const current = page || listData?.tablePaging?.page
     let search: any
@@ -79,12 +93,11 @@ const List = () => {
       search = JSON.stringify(search)
     }
 
-    console.log("di fetch", { search })
-
     overmindActions.list.getList({
       params,
       search,
       current,
+      sortBy,
     })
   }
 
@@ -150,26 +163,47 @@ const List = () => {
             </Col>
           </Row>
           <Row>
-            <Form.Label>Search by</Form.Label>
-            <Col className="mb-3" lg={3} md={6} sm={12}>
-              <Select
-                onChange={(e: any) => {
-                  setSearchBy(e.value)
-                  setSearchBySelect(e)
-                }}
-                placeholder="Search by"
-                options={searchByOption}
-                value={searchBySelect}
-              />
+            <Col lg={3} md={12} sm={12}>
+              <Row>
+                <Form.Label>Sort by</Form.Label>
+                <Col className="mb-3" lg={12}>
+                  <Select
+                    onChange={(e: any) => {
+                      setSortBy(e.value)
+                      setSortBySelect(e)
+                    }}
+                    placeholder="Sort by"
+                    options={searchByOption}
+                    value={sortBySelect}
+                  />
+                </Col>
+              </Row>
             </Col>
-            <Col className="mb-3" lg={3} md={6} sm={12}>
-              <Form.Control
-                type="text"
-                onChange={debounce((e: any) => {
-                  setSearchTerm(e.target.value)
-                }, 800)}
-                placeholder="Search (case sensitive & exact)"
-              />
+
+            <Col lg={6} md={12} sm={12}>
+              <Row>
+                <Form.Label>Search by</Form.Label>
+                <Col className="mb-3" lg={6} md={6} sm={12}>
+                  <Select
+                    onChange={(e: any) => {
+                      setSearchBy(e.value)
+                      setSearchBySelect(e)
+                    }}
+                    placeholder="Search by"
+                    options={searchByOption}
+                    value={searchBySelect}
+                  />
+                </Col>
+                <Col className="mb-3" lg={6} md={6} sm={12}>
+                  <Form.Control
+                    type="text"
+                    onChange={debounce((e: any) => {
+                      setSearchTerm(e.target.value)
+                    }, 800)}
+                    placeholder="Search (case sensitive & exact)"
+                  />
+                </Col>
+              </Row>
             </Col>
           </Row>
           <Row>

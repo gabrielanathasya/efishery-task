@@ -1,12 +1,6 @@
 import { Row, Col, Table, Pagination } from "react-bootstrap"
 import { useEffect, useState } from "react"
-import {
-  IoChevronDownOutline,
-  IoTrashBin,
-  IoPencil,
-  IoStar,
-  IoStarOutline,
-} from "react-icons/io5"
+import { IoChevronDownOutline, IoTrashBin, IoPencil } from "react-icons/io5"
 import EmptySection from "components/EmptySection"
 
 type tableHeadProps = {

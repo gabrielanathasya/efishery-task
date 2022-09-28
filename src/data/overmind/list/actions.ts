@@ -1,13 +1,26 @@
 export const getList = async (
   { state, effects }: any,
-  { params, search, current }: any
+  { params, search, current, sortBy }: any
 ) => {
   state.isRequesting = true
 
   await effects.list.services
     .getList(params, search)
     .then((res: any) => {
-      const processedData = res.data?.map((item: any) => {
+      const newList = [...res.data]
+      if (sortBy) {
+        newList?.sort((a: any, b: any) => {
+          if (a[sortBy] < b[sortBy]) {
+            return -1
+          }
+          if (a[sortBy] > b[sortBy]) {
+            return 1
+          }
+          return 0
+        })
+      }
+
+      const processedData = newList?.map((item: any) => {
         return {
           id: item?.uuid,
           rowData: [

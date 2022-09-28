@@ -13,7 +13,6 @@ export const listHTTPService = ({
     if (search) {
       pathUrl = pathUrl + "&search=" + search
     }
-    console.log({ pathUrl, search })
     return baseGet(pathUrl)
   }
 
