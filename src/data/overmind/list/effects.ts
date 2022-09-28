@@ -7,8 +7,8 @@ export const services = {
   create(spec: any) {
     return listService.create(spec)
   },
-  update({ id, spec }: any) {
-    return listService.update({ id, spec })
+  update(spec: any) {
+    return listService.update(spec)
   },
   delete({ id }: any) {
     return listService.deleteData({ id })

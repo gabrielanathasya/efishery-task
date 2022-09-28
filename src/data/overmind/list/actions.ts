@@ -92,22 +92,27 @@ export const getSizeOption = async ({ state, effects }: any) => {
   state.isRequesting = false
 }
 
-// export const getDetail = async ({ state, effects }, { id }) => {
-//   state.isRequesting = true
+export const getDetail = async ({ state, effects }: any, id: any) => {
+  state.isRequesting = true
+  const searchParam = {
+    uuid: id,
+  }
+  const params = {
+    search: JSON.stringify(searchParam),
+  }
+  await effects.list.services
+    .getList(params)
+    .then((res: any) => {
+      const detail = res.data
+      state.list.detailData = detail ? detail[0] : null
+    })
+    .catch((error: any) => {
+      console.error("[FAIL GET DETAIL]", error)
+      alert("Get Detail Failed")
+    })
 
-//   await effects.cv.services
-//     .detail({ id })
-//     .then((res) => {
-//       const detail = res.data
-//       state.cv.detailData = detail ? detail[0] : null
-//     })
-//     .catch((error) => {
-//       console.error("[FAIL GET DETAIL]", error)
-//       alert("Get Detail Failed")
-//     })
-
-//   state.isRequesting = false
-// }
+  state.isRequesting = false
+}
 
 export const create = async ({ state, effects }: any, reqPayload: any) => {
   state.isRequesting = true
@@ -120,19 +125,16 @@ export const create = async ({ state, effects }: any, reqPayload: any) => {
   state.isRequesting = false
 }
 
-// export const update = async ({ state, effects }, spec) => {
-//   state.isRequesting = true
+export const update = async ({ state, effects }: any, spec: any) => {
+  state.isRequesting = true
 
-//   const id = spec.id
-//   delete spec["id"]
+  await effects.list.services.update(spec).catch((error: any) => {
+    console.error("[FAIL UPDATE]", error)
+    alert("Update Failed")
+  })
 
-//   await effects.cv.services.update({ id, spec }).catch((error) => {
-//     console.error("[FAIL UPDATE]", error)
-//     alert("Update Failed")
-//   })
-
-//   state.isRequesting = false
-// }
+  state.isRequesting = false
+}
 
 // export const deleteById = async ({ state, effects }, { id }) => {
 //   state.isRequesting = true

@@ -18,8 +18,8 @@ export const listHTTPService = ({
     return basePost(pathUrl, spec)
   }
 
-  const update = ({ id, spec }: any) => {
-    const pathUrl = path + "/" + id
+  const update = (spec: any) => {
+    const pathUrl = path + "/"
     return basePut(pathUrl, spec)
   }
 

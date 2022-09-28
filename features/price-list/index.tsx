@@ -34,7 +34,7 @@ const List = () => {
   }, [listData?.tableBody])
 
   const fetchListData = (
-    page: any,
+    page: any = undefined,
     searchTerm: string | undefined = undefined,
     searchBy: string | undefined = undefined
   ) => {
@@ -80,6 +80,7 @@ const List = () => {
 
   const handleSubmitForm = () => {
     setIsOpenForm(false)
+    fetchListData()
   }
 
   const handleDelete = (id: any) => {

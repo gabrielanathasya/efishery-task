@@ -33,33 +33,58 @@ const FormComponent = ({ id, handleSubmitForm }: ContactFormProps) => {
   }, [])
 
   useEffect(() => {
+    if (id) {
+      overmindActions.list.getDetail(id)
+    }
+  }, [id])
+
+  useEffect(() => {
     setInitialValue({
       komoditas: detailData?.komoditas || "",
-      areaKota: detailData?.areaKota || "",
-      areaProvinsi: detailData?.areaProvinsi || "",
+      areaKota: detailData?.area_kota || "",
+      areaProvinsi: detailData?.area_provinsi || "",
       size: detailData?.size || 0,
       price: detailData?.price || 0,
-      tanggal: moment(detailData?.tanggal).format("YYYY-MM-DD"),
+      tanggal: moment(detailData?.tgl_parsed).format("YYYY-MM-DD"),
     })
   }, [detailData])
 
   const onSubmitForm = (values: any, actions: any) => {
     if (values) {
       if (id) {
-        // edit
+        overmindActions.list
+          .update({
+            condition: {
+              uuid: id,
+            },
+            set: {
+              komoditas: values.komoditas,
+              area_provinsi: values.areaProvinsi,
+              area_kota: values.areaKota,
+              size: values.size,
+              price: values.price,
+              tgl_parsed: moment(values.tanggal).utc().format(),
+            },
+          })
+          .then(() => {
+            handleSubmitForm()
+          })
       } else {
-        overmindActions.list.create([
-          {
-            komoditas: values.komoditas,
-            area_provinsi: values.areaProvinsi,
-            area_kota: values.areaKota,
-            size: values.size,
-            price: values.price,
-            tgl_parsed: moment(values.tanggal).utc().format(),
-          },
-        ])
+        overmindActions.list
+          .create([
+            {
+              komoditas: values.komoditas,
+              area_provinsi: values.areaProvinsi,
+              area_kota: values.areaKota,
+              size: values.size,
+              price: values.price,
+              tgl_parsed: moment(values.tanggal).utc().format(),
+            },
+          ])
+          .then(() => {
+            handleSubmitForm()
+          })
       }
-      handleSubmitForm()
     } else {
       alert("Please fill out the form")
     }
@@ -94,8 +119,6 @@ const FormComponent = ({ id, handleSubmitForm }: ContactFormProps) => {
     setFieldValue,
     isSubmitting,
   } = formik
-
-  console.log({ areaOption, areaMap })
 
   return (
     <div className="form-component">
