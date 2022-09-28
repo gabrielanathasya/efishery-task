@@ -119,6 +119,7 @@ const List = () => {
 
   const handleAddList = () => {
     setEditId(null)
+    overmindActions.list.resetDetailData()
     setIsOpenForm(true)
   }
 
