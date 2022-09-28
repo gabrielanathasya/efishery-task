@@ -12,7 +12,7 @@ export const baseService = ({ get, post, put, deleteData }: any) => {
   }
 
   const baseDelete = (pathUrl: string, spec: any = {}, config: any = {}) => {
-    return deleteData(pathUrl, config)
+    return deleteData(pathUrl, spec, config)
   }
 
   return { basePost, basePut, baseDelete, baseGet }

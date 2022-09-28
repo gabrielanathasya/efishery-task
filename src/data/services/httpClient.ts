@@ -85,9 +85,9 @@ export const HttpClient = (baseURL: string) => {
       })
   }
 
-  const deleteData = (url: any, config = {}) => {
+  const deleteData = (url: any, spec: any, config = {}) => {
     return _http
-      .delete(url, config)
+      .delete(url, { headers: config, data: spec })
       .then((res: any) => {
         return handleAPIStatus(res)
       })

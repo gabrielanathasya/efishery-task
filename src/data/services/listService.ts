@@ -23,9 +23,9 @@ export const listHTTPService = ({
     return basePut(pathUrl, spec)
   }
 
-  const deleteData = ({ id }: any) => {
-    const pathUrl = path + "/" + id
-    return baseDelete(pathUrl)
+  const deleteData = (spec: any) => {
+    const pathUrl = path + "/"
+    return baseDelete(pathUrl, spec)
   }
 
   const getAreaOption = () => {

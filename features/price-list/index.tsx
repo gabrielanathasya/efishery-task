@@ -80,6 +80,7 @@ const List = () => {
 
   const handleSubmitForm = () => {
     setIsOpenForm(false)
+    overmindActions.list.resetDetailData()
     fetchListData()
   }
 
@@ -88,9 +89,15 @@ const List = () => {
     setIsOpenModalDelete(true)
   }
 
-  const handleConfirmDelete = (id: any) => {}
+  const handleConfirmDelete = (id: any) => {
+    console.log({ id })
+    overmindActions.list.deleteById(id).then(() => {
+      fetchListData()
+    })
+  }
 
   const handleEdit = (id: any) => {
+    console.log("handleEdit", { id })
     setEditId(id)
     setIsOpenForm(true)
   }
@@ -150,7 +157,10 @@ const List = () => {
           title={`${editId ? "Edit" : "Add"} Item`}
           isShow={isOpenForm}
           fnCustomBody={renderForm}
-          onCancel={() => setIsOpenForm(false)}
+          onCancel={() => {
+            setIsOpenForm(false)
+            overmindActions.list.resetDetailData()
+          }}
           cancelButtonText={undefined}
           confirmButtonText={undefined}
           onConfirm={() => {}}

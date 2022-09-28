@@ -10,8 +10,8 @@ export const services = {
   update(spec: any) {
     return listService.update(spec)
   },
-  delete({ id }: any) {
-    return listService.deleteData({ id })
+  delete(spec: any) {
+    return listService.deleteData(spec)
   },
   getAreaOption() {
     return listService.getAreaOption()

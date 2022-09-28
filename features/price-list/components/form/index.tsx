@@ -6,6 +6,7 @@ import Select from "react-select"
 import { epochToDate } from "utils/date"
 import validationSchema from "./validationSchema"
 import SpinnerComponent from "components/Spinner"
+import uuid from "react-uuid"
 const moment = require("moment")
 
 type ContactFormProps = {
@@ -51,20 +52,23 @@ const FormComponent = ({ id, handleSubmitForm }: ContactFormProps) => {
 
   const onSubmitForm = (values: any, actions: any) => {
     if (values) {
+      const payload = {
+        komoditas: values.komoditas,
+        area_provinsi: values.areaProvinsi,
+        area_kota: values.areaKota,
+        size: values.size,
+        price: values.price,
+        tgl_parsed: moment(values.tanggal).utc().format(),
+        timestamp: Date.now(),
+      }
+
       if (id) {
         overmindActions.list
           .update({
             condition: {
               uuid: id,
             },
-            set: {
-              komoditas: values.komoditas,
-              area_provinsi: values.areaProvinsi,
-              area_kota: values.areaKota,
-              size: values.size,
-              price: values.price,
-              tgl_parsed: moment(values.tanggal).utc().format(),
-            },
+            set: payload,
           })
           .then(() => {
             handleSubmitForm()
@@ -73,12 +77,8 @@ const FormComponent = ({ id, handleSubmitForm }: ContactFormProps) => {
         overmindActions.list
           .create([
             {
-              komoditas: values.komoditas,
-              area_provinsi: values.areaProvinsi,
-              area_kota: values.areaKota,
-              size: values.size,
-              price: values.price,
-              tgl_parsed: moment(values.tanggal).utc().format(),
+              uuid: uuid(),
+              ...payload,
             },
           ])
           .then(() => {

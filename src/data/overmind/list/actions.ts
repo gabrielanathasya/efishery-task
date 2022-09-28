@@ -136,13 +136,19 @@ export const update = async ({ state, effects }: any, spec: any) => {
   state.isRequesting = false
 }
 
-// export const deleteById = async ({ state, effects }, { id }) => {
-//   state.isRequesting = true
+export const deleteById = async ({ state, effects }: any, id: any) => {
+  state.isRequesting = true
 
-//   await effects.cv.services.delete({ id }).catch((error) => {
-//     console.error("[FAIL DELETE]", error)
-//     alert("Delete Failed")
-//   })
+  await effects.list.services
+    .delete({ condition: { uuid: id } })
+    .catch((error: any) => {
+      console.error("[FAIL DELETE]", error)
+      alert("Delete Failed")
+    })
 
-//   state.isRequesting = false
-// }
+  state.isRequesting = false
+}
+
+export const resetDetailData = async ({ state, effects }: any) => {
+  state.list.detailData = null
+}
