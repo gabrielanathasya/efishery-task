@@ -7,7 +7,7 @@ import { epochToDate } from "utils/date"
 import validationSchema from "./validationSchema"
 import SpinnerComponent from "components/Spinner"
 import uuid from "react-uuid"
-const moment = require("moment")
+import moment from "moment"
 
 type ContactFormProps = {
   id: number | string | null

@@ -1,4 +1,4 @@
-const moment = require("moment")
+import moment from "moment"
 
 const dateToEpoch = (date: any) => {
   return date ? moment(date).valueOf() : 0
