@@ -48,7 +48,16 @@ const FormComponent = ({ id, handleSubmitForm }: ContactFormProps) => {
       if (id) {
         // edit
       } else {
-        //insert
+        overmindActions.list.create([
+          {
+            komoditas: values.komoditas,
+            area_provinsi: values.areaProvinsi,
+            area_kota: values.areaKota,
+            size: values.size,
+            price: values.price,
+            tgl_parsed: moment(values.tanggal).utc().format(),
+          },
+        ])
       }
       handleSubmitForm()
     } else {

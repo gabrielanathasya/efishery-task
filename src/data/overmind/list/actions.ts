@@ -109,16 +109,16 @@ export const getSizeOption = async ({ state, effects }: any) => {
 //   state.isRequesting = false
 // }
 
-// export const create = async ({ state, effects }, reqPayload) => {
-//   state.isRequesting = true
+export const create = async ({ state, effects }: any, reqPayload: any) => {
+  state.isRequesting = true
 
-//   await effects.cv.services.create(reqPayload).catch((error) => {
-//     console.error("[FAIL CREATE]", error)
-//     alert("Insert Failed")
-//   })
+  await effects.list.services.create(reqPayload).catch((error: any) => {
+    console.error("[FAIL CREATE]", error)
+    alert("Insert Failed")
+  })
 
-//   state.isRequesting = false
-// }
+  state.isRequesting = false
+}
 
 // export const update = async ({ state, effects }, spec) => {
 //   state.isRequesting = true
